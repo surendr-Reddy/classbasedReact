@@ -4,17 +4,37 @@ import ChildClass from "./ChildClass"
 export class ParentClass extends Component {
     constructor(props){
         super(props);
-        console.log(`${this.props.class} constructor`);
+        this.state={
+          dummyData:{
+            userDetails:"dummy"
+          },
+          name2:"hi"
+        }
         
     }
-    componentDidMount(){
-        console.log(`${this.props.class} componentdidmount`);
+   async componentDidMount(){
+      const ApiData= await fetch("https://api.github.com/users/surendr-Reddy");
+      const jsonData= await ApiData.json();
+      console.log(jsonData);
+      this.setState({
+        dummyData:{userDetails:jsonData}
+      })
+    }
+    componentDidUpdate(){
+      console.log("after state update");
+    }
+    componentWillUnmount(){
+      console.log("componet unmount");
     }
   render() {
+    const {name,location}=this.state.dummyData.userDetails
+   
     return (
+     
       <div>
-        { console.log(`${this.props.class} render`)}
-        {this.props.class==="parent1"?<ChildClass class='child1' />:<ChildClass class='child2' />}
+        <h1>Name:{name}</h1>
+        <h2>location:{location}</h2>
+        <h3>name2:{this.state.name2}</h3>
       </div>
     )
   }
